@@ -1,8 +1,10 @@
 from flask import Flask
+from routes import blueprint
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
+app.register_blueprint(blueprint)
 
 
 if __name__ == '__main__':
