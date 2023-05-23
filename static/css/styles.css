@@ -40,11 +40,19 @@ a {
     background-color: #f9c53d;
     border-radius: 5px;
     margin-top: 20px;
-    display: inline-block;
-    transition: background-color 0.3s ease;
+   
 }
 
 a:hover {
     background-color: #f3b72e;
     font-weight: bold;
 }
+
+.navigation {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    column-gap: 20px;
+  }
+  
+  
