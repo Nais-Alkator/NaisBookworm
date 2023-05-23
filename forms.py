@@ -1,11 +1,14 @@
-from wtforms import Form, StringField
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 
-class BookForm(Form):
-    title = StringField(label="Title", validators=[DataRequired()])
+class BookForm(FlaskForm):
+    title = StringField('Название книги', validators=[DataRequired()])
+    authors = StringField('Авторы', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
 
 
-class Author(Form):
-    name = StringField(label="Name", validators=[DataRequired()])
-
+class AuthorForm(FlaskForm):
+    name = StringField('Имя автора', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
