@@ -9,12 +9,19 @@ blueprint = Blueprint("routes", __name__)
 def home():
     return render_template("index.html")
 
+
+@blueprint.route('/authors')
+def get_authors():
+    return render_template("authors.html")
+
+
 @blueprint.route('/books')
 def book_list():
     # Обработка запроса для отображения списка книг
     # Получение списка книг из базы данных
     # Возвращение соответствующего HTML-шаблона
     return 
+
 
 @blueprint.route('/books/add', methods=['GET', 'POST'])
 def add_book():
@@ -23,7 +30,7 @@ def add_book():
     # Добавление новой книги в базу данных
     # Перенаправление на страницу со списком книг или другой соответствующий роут
     return
-# Определите другие маршруты для редактирования, удаления и других операций
+
 
 @blueprint.route('/search')
 def search():
