@@ -10,5 +10,11 @@
 </head>
 <body>
     <h1>Список авторов</h1>
+    {% for author in authors %}
+        <div class="author">
+            <li>{{ author.name }}</li>
+        </div>
+    {% endfor %}
+    
 </body>
 </html>
