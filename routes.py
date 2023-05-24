@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from models import Author
+from models import Author, Book
 
 
 blueprint = Blueprint("routes", __name__)
@@ -12,3 +12,8 @@ def get_home():
 def get_authors():
     authors = Author.query.all()
     return render_template("authors.html", authors=authors)
+
+@blueprint.route('/books')
+def get_books():
+    books = Book.query.all()
+    return render_template("books.html", books=books)

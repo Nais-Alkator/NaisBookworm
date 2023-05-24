@@ -16,13 +16,13 @@
         <p>Пользуйтесь поиском, чтобы найти интересующие вас книги.</p>
     </section>
     <section class="navigation">
-        <a href="#">Просмотреть список книг</a>
+        <a href="{{ url_for('routes.get_books') }}">Просмотреть список книг</a>
         <a href="{{ url_for('routes.get_authors') }}">Просмотреть список авторов</a>
         <a href="#">Добавить книгу</a>
         <a href="#">Добавить автора</a>
     </section>
       
 
-    
+
 </body>
 </html>
