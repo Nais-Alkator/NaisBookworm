@@ -12,7 +12,7 @@
     <h1>Список авторов</h1>
     {% for author in authors %}
         <div class="author">
-            <li>{{ author.name }}</li>
+            <a class="author-link" href="{{ url_for('routes.list_author_books', author_id=author.id) }}"><li>{{ author.name }}</li></a>
         </div>
     {% endfor %}
     <hr>

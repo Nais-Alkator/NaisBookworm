@@ -33,7 +33,7 @@ p {
 }
 
 /* Стили для ссылок */
-a {
+.navigation-link {
     color: #333;
     text-decoration: none;
     padding: 10px 20px;
@@ -55,5 +55,8 @@ a:hover {
     column-gap: 20px;
   }
   
-
+.author-link {
+    color: black;
+    text-decoration: none;
+}
   

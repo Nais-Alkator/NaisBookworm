@@ -31,3 +31,9 @@ def add_author():
     else:
         flash('Ошибка валидации формы.')
         return redirect(url_for('routes.get_authors'))
+
+@blueprint.route("/author_books/<int:author_id>")
+def list_author_books(author_id):
+    author = Author.query.get(author_id)
+    author_books = list(author.books)
+    return render_template("author_books.html", author_books=author_books, author_name=author.name)
