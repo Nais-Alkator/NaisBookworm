@@ -27,6 +27,7 @@
     
     <div id="form-container" style="display: none;">
       <form method="POST" action="{{ url_for('routes.add_author') }}">
+        {{ form.csrf_token }}
           <br>
           <div class="form-group">
             {{ form.name.label }}
