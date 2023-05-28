@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NaisBookworm - {{ author_name }}</title>
-    <meta name="description" content="NaisBookworm - Список авторов">
-    <meta name="keywords" content="онлайн библиотека, книги, авторы, чтение, {{ author_name }}">
+    <title>NaisBookworm - {{ author.name }}</title>
+    <meta name="description" content="NaisBookworm - {{ author.name }}">
+    <meta name="keywords" content="онлайн библиотека, книги, авторы, чтение, {{ author.name }}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 </head>
 <body>
-    <h1>{{ author_name }}</h1>
+
+    <h1>{{ author.name }}</h1>
     <ul>
         {% for book in author_books %}
             <li>{{ book.title }}</li>
         {% endfor %}
+        <li>{{ author.id }}</li>
     </ul>
+    <a href="{{ url_for('routes.delete_author', author_id=author.id) }}">Удалить автора</a>
 </body>
 </html>

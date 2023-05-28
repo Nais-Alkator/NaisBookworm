@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <h1>Список авторов</h1>
     {% for author in authors %}
         <div class="author">
