@@ -15,7 +15,6 @@
         {% for book in author_books %}
             <li>{{ book.title }}</li>
         {% endfor %}
-        <li>{{ author.id }}</li>
     </ul>
     <a href="{{ url_for('routes.delete_author', author_id=author.id) }}">Удалить автора</a>
 </body>
