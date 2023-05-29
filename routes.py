@@ -76,10 +76,22 @@ def update_author(author_id):
 def add_book():
     form = BookForm(request.form)
     if form.validate():
-        print(form.authors.data)
-        author_names = form.authors.data  # Предполагая, что авторы разделены запятыми
-        authors = [Author(name=author_name) for author_name in author_names]
-        new_book = Book(title=form.title.data, authors=authors)
+        author_names = form.authors.data
+        authors = []
+
+        for author_name in author_names:
+            author = Author.query.filter_by(name=author_name).first()
+
+            if author:
+                authors.append(author)
+            else:
+                new_author = Author(name=author_name)
+                db.session.add(new_author) 
+                authors.append(new_author)
+
+        new_book = Book(title=form.title.data)
+        new_book.authors = authors  
+
         db.session.add(new_book)
         db.session.commit()
         flash('Книга успешно добавлена.')
