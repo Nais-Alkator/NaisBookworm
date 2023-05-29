@@ -16,6 +16,42 @@
             <li>{{ book.title }}</li>
         {% endfor %}
     </ul>
+    <hr>
+    <button id="update_author_button" onclick="toggleForm()">Редактировать автора</button>
+    <div id="form-container" style="display: none;">
+        <form method="POST" action="{{ url_for('routes.update_author', author_id=author.id) }}">
+            {{ form.csrf_token }}
+            <input type="hidden" name="_method" value="PUT">
+            <br>
+            <div class="form-group">
+              {{ form.name.label }}
+              {{ form.name }}
+              {% for error in form.name.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <br>
+          
+            {{ form.submit() }}
+          </form>
+      </div>
+      <br>
+      <br>
+      <script>
+        // Функция для раскрытия/скрытия формы
+        function toggleForm() {
+          var formContainer = document.getElementById('form-container');
+          var addButton = document.getElementById('update_author_button');
+          if (formContainer.style.display === 'none') {
+            formContainer.style.display = 'block';
+            addButton.textContent = "Скрыть поле";
+          } else {
+            formContainer.style.display = 'none';
+            addButton.textContent = "Редактировать автора";
+          }
+        }
+      </script>
+
     <a href="{{ url_for('routes.delete_author', author_id=author.id) }}">Удалить автора</a>
 </body>
 </html>

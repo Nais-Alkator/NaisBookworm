@@ -42,7 +42,8 @@ def add_author():
 def list_author_books(author_id):
     author = Author.query.get(author_id)
     author_books = list(author.books)
-    return render_template("author_books.html", author_books=author_books, author=author)
+    form = AuthorForm()
+    return render_template("author_books.html", author_books=author_books, author=author, form=form)
 
 
 @blueprint.route("/delete_author/<int:author_id>/", methods=["DELETE", "GET"])
@@ -52,3 +53,19 @@ def delete_author(author_id):
     db.session.commit()
     flash(f"Авто {author.name} успешно удален")
     return redirect(url_for("routes.get_authors"))
+
+
+@blueprint.route("/update_author/<int:author_id>", methods=["PUT", "GET", "POST"])
+def update_author(author_id):
+    if request.method == 'PUT' or request.form.get('_method') == 'PUT':
+        form = AuthorForm(request.form)
+        if form.validate():
+            author = Author.query.get(author_id)
+            author.name = form.name.data
+            db.session.commit()
+            flash('Автор успешно изменен.')
+            return redirect(url_for('routes.get_authors'))
+        else:
+            print(form.errors)
+            flash('Ошибка валидации формы.')
+            return redirect(url_for('routes.get_authors'))
