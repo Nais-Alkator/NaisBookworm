@@ -12,7 +12,7 @@
     <h1>Список книг</h1>
     {% for book in books %}
         <div class="author">
-            <li>{{ book.title }}</li>
+            <li>{{ book.title }} - {% for author in book.authors %} {{ author.name }} {% endfor %}</li>
         </div>
     {% endfor %}
     <br>
