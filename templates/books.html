@@ -16,6 +16,48 @@
         </div>
     {% endfor %}
     <br>
+    <hr>
+    <button id="add_book_button" onclick="toggleForm()">Добавить книгу</button>
+    
+    <div id="form-container" style="display: none;">
+      <form method="POST" action="{{ url_for('routes.add_book') }}">
+        {{ form.csrf_token }}
+          <br>
+          <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title }}
+            {% for error in form.title.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            <br>
+            <br>
+            {{ form.authors.label }}
+            {{ form.authors }}
+            {% for error in form.authors.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <br>
+        
+          {{ form.submit() }}
+        </form>
+    </div>
+    <br>
+    <br>
     <a href="{{ url_for('routes.get_home') }}">На главную</a>
+    <script>
+      // Функция для раскрытия/скрытия формы
+      function toggleForm() {
+        var formContainer = document.getElementById('form-container');
+        var addButton = document.getElementById('add_book_button');
+        if (formContainer.style.display === 'none') {
+          formContainer.style.display = 'block';
+          addButton.textContent = "Скрыть поле";
+        } else {
+          formContainer.style.display = 'none';
+          addButton.textContent = "Добавить книгу";
+        }
+      }
+    </script>
 </body>
 </html>

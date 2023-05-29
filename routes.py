@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from models import Author, Book, db
-from forms import AuthorForm
+from forms import AuthorForm, BookForm
 
 
 blueprint = Blueprint("routes", __name__)
@@ -21,7 +21,8 @@ def get_authors():
 @blueprint.route('/books')
 def get_books():
     books = Book.query.all()
-    return render_template("books.html", books=books)
+    form = BookForm()
+    return render_template("books.html", books=books, form=form)
 
 
 @blueprint.route("/add_author", methods=["POST"])
@@ -69,3 +70,20 @@ def update_author(author_id):
             print(form.errors)
             flash('Ошибка валидации формы.')
             return redirect(url_for('routes.get_authors'))
+
+
+@blueprint.route("/add_book", methods=["POST"])
+def add_book():
+    form = BookForm(request.form)
+    if form.validate():
+        print(form.authors.data)
+        author_names = form.authors.data  # Предполагая, что авторы разделены запятыми
+        authors = [Author(name=author_name) for author_name in author_names]
+        new_book = Book(title=form.title.data, authors=authors)
+        db.session.add(new_book)
+        db.session.commit()
+        flash('Книга успешно добавлена.')
+        return redirect(url_for('routes.get_books'))
+    else:
+        flash('Ошибка валидации формы.')
+        return redirect(url_for('routes.get_books'))
