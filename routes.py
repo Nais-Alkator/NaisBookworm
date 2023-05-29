@@ -52,7 +52,7 @@ def delete_author(author_id):
     author = Author.query.get(author_id)
     db.session.delete(author)
     db.session.commit()
-    flash(f"Авто {author.name} успешно удален")
+    flash(f"Автор {author.name} успешно удален")
     return redirect(url_for("routes.get_authors"))
 
 
@@ -99,3 +99,10 @@ def add_book():
     else:
         flash('Ошибка валидации формы.')
         return redirect(url_for('routes.get_books'))
+
+
+@blueprint.route("/book/<int:book_id>")
+def get_book(book_id):
+    book = Book.query.get(book_id)
+    authors = list(book.authors)
+    return render_template("book.html", book=book, authors=authors)
