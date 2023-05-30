@@ -106,3 +106,12 @@ def get_book(book_id):
     book = Book.query.get(book_id)
     authors = list(book.authors)
     return render_template("book.html", book=book, authors=authors)
+
+
+@blueprint.route("/delete_book/<int:book_id>/", methods=["DELETE", "GET"])
+def delete_book(book_id):
+    book = Book.query.get(book_id)
+    db.session.delete(book)
+    db.session.commit()
+    flash(f"Книга {book.title} успешно удалена")
+    return redirect(url_for("routes.get_books"))
