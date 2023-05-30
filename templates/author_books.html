@@ -13,7 +13,7 @@
     <h1>{{ author.name }}</h1>
     <ul>
         {% for book in author_books %}
-            <li>{{ book.title }}</li>
+            <a class="book-link" href="{{ url_for('routes.get_book', book_id=book.id) }}"><li>{{ book.title }}</li></a>
         {% endfor %}
     </ul>
     <hr>

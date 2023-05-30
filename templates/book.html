@@ -14,4 +14,47 @@
     {% for author in authors %}
       <h3><a href="{{ url_for('routes.list_author_books', author_id=author.id) }}">{{ author.name }}</a></h3>
     {% endfor %}
+    <button id="update_book_button" onclick="toggleForm()">Редактировать книгу</button>
+    <div id="form-container" style="display: none;">
+        <form method="POST" action="{{ url_for('routes.update_book', book_id=book.id) }}">
+            {{ form.csrf_token }}
+            <input type="hidden" name="_method" value="PUT">
+            <br>
+            <div class="form-group">
+              {{ form.title.label }}
+              {{ form.title }}
+              {% for error in form.title.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+              <br>
+              <br>
+              {{ form.authors }}
+              {% for error in form.authors.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <br>
+            {{ form.submit() }}
+          </form>
+      </div>
+      <br>
+      <br>
+      
+      <script>
+        // Функция для раскрытия/скрытия формы
+        function toggleForm() {
+          var formContainer = document.getElementById('form-container');
+          var addButton = document.getElementById('update_book_button');
+          if (formContainer.style.display === 'none') {
+            formContainer.style.display = 'block';
+            addButton.textContent = "Скрыть поле";
+          } else {
+            formContainer.style.display = 'none';
+            addButton.textContent = "Редактировать книгу";
+          }
+        }
+      </script>
+    <br>
+    <br>
+    <a href="{{ url_for('routes.delete_book', book_id=book.id) }}">Удалить книгу</a>
 </body>

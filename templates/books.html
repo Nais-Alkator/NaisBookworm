@@ -17,6 +17,13 @@
       {% endif %}
     {% endwith %}
     <h1>Список книг</h1>
+    <section class="search">
+      <form action="{{ url_for('routes.search_book') }}" method="GET">
+          <input type="text" name="query" placeholder="Введите название книги">
+          <button type="submit">Поиск</button>
+        </form>
+    </section>
+    <br>
     {% for book in books %}
         <div class="author">
             <a class="book-link" href="{{ url_for('routes.get_book', book_id=book.id) }}"><li>{{ book.title }} - {% for author in book.authors %} {{ author.name }} {% endfor %}</li></a>
