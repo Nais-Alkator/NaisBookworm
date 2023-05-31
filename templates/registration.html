@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaisBookworm - Регистрация пользователя</title>
+    <meta name="description" content="NaisBookworm - онлайн библиотека с широким выбором книг различных жанров и авторов.">
+    <meta name="keywords" content="онлайн библиотека, книги, авторы, чтение">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+    <h1>Регистрация нового пользователя:</h1>
+    <form method="POST" action="{{ url_for('routes.register') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+        {{ form.username.label }}
+        {{ form.username(class="form-control") }}
+        {% for error in form.username.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </div>
+        <div class="form-group">
+        {{ form.password.label }}
+        {{ form.password(class="form-control") }}
+        {% for error in form.password.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </div>
+        <div class="form-group">
+        {{ form.confirm_password.label }}
+        {{ form.confirm_password(class="form-control") }}
+        {% for error in form.confirm_password.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</body>
+</html>

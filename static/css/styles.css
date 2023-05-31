@@ -59,4 +59,11 @@ a:hover {
     color: black;
     text-decoration: none;
 }
+
+.registration-link {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+}
   

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from models import Author, Book, db
-from forms import AuthorForm, BookForm
+from models import Author, Book, User, db
+from forms import AuthorForm, BookForm, RegistrationForm
 
 
 blueprint = Blueprint("routes", __name__)
@@ -155,3 +155,22 @@ def search_book():
     else:
         flash('Книга не найдена.')
         return redirect(url_for('routes.get_books'))
+
+
+@blueprint.route("/registration")
+def get_registration_form():
+    form = RegistrationForm()
+    return render_template("registration.html", form=form)
+
+
+@blueprint.route("/registration", methods=["GET", "POST"])
+def register():
+    form = RegistrationForm(request.form)
+    if form.validate_on_submit():
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Вы успешно зарегистрировались! Теперь вы можете войти в систему.')
+        return redirect(url_for('routes.get_home'))
+    return render_template('registration.html', form=form)

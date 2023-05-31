@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <nav>
+        <a class="registration-link" href="{{ url_for('routes.get_registration_form') }}">Регистрация</a>
+    </nav>
     <section class="welcome">
         <h1>Добро пожаловать в NaisBookworm!</h1>
         <p>Мы рады приветствовать вас в нашей онлайн библиотеке.</p>
