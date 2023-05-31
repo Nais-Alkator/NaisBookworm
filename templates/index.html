@@ -18,16 +18,63 @@
     {% endwith %}
     <nav>
         <a class="registration-link" href="{{ url_for('routes.get_registration_form') }}">Регистрация</a>
+        <a class="authorization-link" href="#" onclick="showLoginForm()">Авторизация</a>
+        <div id="loginPopup" class="login-popup" style="display: none;" onclick="hideLoginForm(event)">
+            <form method="POST" action="{{ url_for('routes.login') }}" class="login-form" onclick="event.stopPropagation()">
+                <div class="form-group">
+                    {{ form.hidden_tag() }}
+                    {{ form.username.label }}
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                      <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password }}
+                    {% for error in form.password.errors %}
+                      <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="form-group">
+                    {{ form.remember_me.label }}
+                    {{ form.remember_me }}
+                    {% for error in form.remember_me.errors %}
+                      <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <br>
+                {{ form.submit() }}
+            </form>
+        </div>
     </nav>
+
     <section class="welcome">
         <h1>Добро пожаловать в NaisBookworm!</h1>
         <p>Мы рады приветствовать вас в нашей онлайн библиотеке.</p>
         <p>У нас вы можете найти широкий выбор книг различных жанров и авторов.</p>
         <p>Пользуйтесь поиском, чтобы найти интересующие вас книги.</p>
     </section>
+
     <section class="navigation">
         <a class="navigation-link" href="{{ url_for('routes.get_books') }}">Просмотреть список книг</a>
         <a class="navigation-link" href="{{ url_for('routes.get_authors') }}">Просмотреть список авторов</a>
     </section>
+
+    <script>
+        function showLoginForm() {
+          var loginPopup = document.getElementById('loginPopup');
+          loginPopup.style.display = 'flex';
+        }
+    
+        function hideLoginForm(event) {
+          var loginPopup = document.getElementById('loginPopup');
+          if (event.target === loginPopup) {
+            loginPopup.style.display = 'none';
+          }
+        }
+      </script>
 </body>
 </html>

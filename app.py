@@ -1,10 +1,11 @@
 from flask import Flask
 from dotenv import load_dotenv
 import os
-from routes import blueprint
+from routes import blueprint, login_manager
 from models import db
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate
+
 
 load_dotenv()
 
@@ -14,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(app.root_pat
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 app.secret_key = os.environ.get("SECRET_KEY")
 migrate = Migrate(app, db)
+login_manager.init_app(app)
 db.init_app(app)
 app.debug = True
 toolbar = DebugToolbarExtension(app)

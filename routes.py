@@ -1,14 +1,18 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from models import Author, Book, User, db
-from forms import AuthorForm, BookForm, RegistrationForm
+from forms import AuthorForm, BookForm, RegistrationForm, LoginForm
+from flask_login import current_user, login_user
+from flask_login import LoginManager
 
 
 blueprint = Blueprint("routes", __name__)
+login_manager = LoginManager()
 
 
 @blueprint.route('/')
 def get_home():
-    return render_template("index.html")
+    login_form = LoginForm()
+    return render_template("index.html", form=login_form)
 
 
 @blueprint.route('/authors', methods=["GET", "POST"])
@@ -174,3 +178,24 @@ def register():
         flash('Вы успешно зарегистрировались! Теперь вы можете войти в систему.')
         return redirect(url_for('routes.get_home'))
     return render_template('registration.html', form=form)
+
+
+@blueprint.route('/login', methods=['GET', 'POST'])
+@login_manager.user_loader
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('routes.get_home'))
+    form = LoginForm(request.form)
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Неправильное имя пользователя или пароль')
+            return redirect(url_for('routes.login'))
+
+        login_user(user, remember=form.remember_me.data)
+        flash("Вы успешно авторизовались")
+        return redirect(url_for('routes.get_home'))
+    print(form.validate_on_submit())
+    print(form.errors)
+    return render_template("index.html", form=form)
