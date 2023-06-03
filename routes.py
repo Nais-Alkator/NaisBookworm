@@ -192,10 +192,9 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Неправильное имя пользователя или пароль')
             return redirect(url_for('routes.login'))
-
+        
         login_user(user, remember=form.remember_me.data)
+        user.is_active = True
+        db.session.commit()
         flash("Вы успешно авторизовались")
-        return redirect(url_for('routes.get_home'))
-    print(form.validate_on_submit())
-    print(form.errors)
-    return render_template("index.html", form=form)
+        return render_template("index.html", form=form)
