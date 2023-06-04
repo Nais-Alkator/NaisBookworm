@@ -23,24 +23,26 @@
         </div>
     {% endfor %}
     <hr>
-    <button id="add_author_button" onclick="toggleForm()">Добавить автора</button>
-    
-    <div id="form-container" style="display: none;">
-      <form method="POST" action="{{ url_for('routes.add_author') }}">
-        {{ form.csrf_token }}
-          <br>
-          <div class="form-group">
-            {{ form.name.label }}
-            {{ form.name }}
-            {% for error in form.name.errors %}
-              <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-          </div>
-          <br>
-        
-          {{ form.submit() }}
-        </form>
-    </div>
+    {% if current_user.is_authenticated %}
+      <button id="add_author_button" onclick="toggleForm()">Добавить автора</button>
+      
+      <div id="form-container" style="display: none;">
+        <form method="POST" action="{{ url_for('routes.add_author') }}">
+          {{ form.csrf_token }}
+            <br>
+            <div class="form-group">
+              {{ form.name.label }}
+              {{ form.name }}
+              {% for error in form.name.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <br>
+          
+            {{ form.submit() }}
+          </form>
+      </div>
+    {% endif %}
     <br>
     <br>
     <a href="{{ url_for('routes.get_home') }}">На главную</a>

@@ -17,12 +17,14 @@
       {% endif %}
     {% endwith %}
     <h1>Список книг</h1>
-    <section class="search">
-      <form action="{{ url_for('routes.search_book') }}" method="GET">
-          <input type="text" name="query" placeholder="Введите название книги">
-          <button type="submit">Поиск</button>
-        </form>
-    </section>
+    {% if current_user.is_authenticated %}
+      <section class="search">
+        <form action="{{ url_for('routes.search_book') }}" method="GET">
+            <input type="text" name="query" placeholder="Введите название книги">
+            <button type="submit">Поиск</button>
+          </form>
+      </section>
+    {% endif %}
     <br>
     {% for book in books %}
         <div class="author">
@@ -31,33 +33,35 @@
     {% endfor %}
     <br>
     <hr>
-    <button id="add_book_button" onclick="toggleForm()">Добавить книгу</button>
-    
-    <div id="form-container" style="display: none;">
-      <form method="POST" action="{{ url_for('routes.add_book') }}">
-        {{ form.csrf_token }}
-          <br>
-          <div class="form-group">
-            {{ form.title.label }}
-            {{ form.title }}
-            {% for error in form.title.errors %}
-              <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+    {% if current_user.is_authenticated %}
+      <button id="add_book_button" onclick="toggleForm()">Добавить книгу</button>
+      
+      <div id="form-container" style="display: none;">
+        <form method="POST" action="{{ url_for('routes.add_book') }}">
+          {{ form.csrf_token }}
             <br>
+            <div class="form-group">
+              {{ form.title.label }}
+              {{ form.title }}
+              {% for error in form.title.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+              <br>
+              <br>
+              {{ form.authors.label }}
+              {{ form.authors }}
+              {% for error in form.authors.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
             <br>
-            {{ form.authors.label }}
-            {{ form.authors }}
-            {% for error in form.authors.errors %}
-              <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-          </div>
-          <br>
-        
-          {{ form.submit() }}
-        </form>
-    </div>
-    <br>
-    <br>
+          
+            {{ form.submit() }}
+          </form>
+      </div>
+      <br>
+      <br>
+    {% endif %}
     <a href="{{ url_for('routes.get_home') }}">На главную</a>
     <script>
       // Функция для раскрытия/скрытия формы

@@ -41,6 +41,7 @@ def get_books():
 
 
 @blueprint.route("/add_author", methods=["POST"])
+@login_required
 def add_author():
     form = AuthorForm(request.form)
     if form.validate():
@@ -63,6 +64,7 @@ def list_author_books(author_id):
 
 
 @blueprint.route("/delete_author/<int:author_id>/", methods=["DELETE", "GET"])
+@login_required
 def delete_author(author_id):
     author = Author.query.get(author_id)
     db.session.delete(author)
@@ -72,6 +74,7 @@ def delete_author(author_id):
 
 
 @blueprint.route("/update_author/<int:author_id>", methods=["PUT", "GET", "POST"])
+@login_required
 def update_author(author_id):
     if request.method == 'PUT' or request.form.get('_method') == 'PUT':
         form = AuthorForm(request.form)
@@ -88,6 +91,7 @@ def update_author(author_id):
 
 
 @blueprint.route("/add_book", methods=["POST"])
+@login_required
 def add_book():
     form = BookForm(request.form)
     if form.validate():
@@ -125,6 +129,7 @@ def get_book(book_id):
 
 
 @blueprint.route("/delete_book/<int:book_id>/", methods=["DELETE", "GET"])
+@login_required
 def delete_book(book_id):
     book = Book.query.get(book_id)
     db.session.delete(book)
@@ -134,6 +139,7 @@ def delete_book(book_id):
 
 
 @blueprint.route("/update_book/<int:book_id>", methods=["GET", "POST"])
+@login_required
 def update_book(book_id):
     if request.method == 'PUT' or request.form.get('_method') == 'PUT':
         form = BookForm(request.form)
@@ -162,6 +168,7 @@ def update_book(book_id):
 
 
 @blueprint.route("/search_book")
+@login_required
 def search_book():
     query = request.args.get('query')  
     book = Book.query.filter(Book.title.ilike(f"{query}")).first()
@@ -201,11 +208,10 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Неправильное имя пользователя или пароль')
-            return redirect(url_for('routes.login'))
-        
-        login_user(user, remember=True)
+            return redirect(url_for('routes.get_home'))
         user.is_active = True
         db.session.commit()
+        login_user(user, remember=True)
         flash(f"Вы успешно авторизовались как {user.username}")
         return render_template("index.html", form=form, user=user)
 

@@ -14,32 +14,33 @@
     {% for author in authors %}
       <h3><a href="{{ url_for('routes.list_author_books', author_id=author.id) }}">{{ author.name }}</a></h3>
     {% endfor %}
-    <button id="update_book_button" onclick="toggleForm()">Редактировать книгу</button>
-    <div id="form-container" style="display: none;">
-        <form method="POST" action="{{ url_for('routes.update_book', book_id=book.id) }}">
-            {{ form.csrf_token }}
-            <input type="hidden" name="_method" value="PUT">
-            <br>
-            <div class="form-group">
-              {{ form.title.label }}
-              {{ form.title }}
-              {% for error in form.title.errors %}
-                <span class="text-danger">{{ error }}</span>
-              {% endfor %}
+    {% if current_user.is_authenticated %}
+      <button id="update_book_button" onclick="toggleForm()">Редактировать книгу</button>
+      <div id="form-container" style="display: none;">
+          <form method="POST" action="{{ url_for('routes.update_book', book_id=book.id) }}">
+              {{ form.csrf_token }}
+              <input type="hidden" name="_method" value="PUT">
               <br>
+              <div class="form-group">
+                {{ form.title.label }}
+                {{ form.title }}
+                {% for error in form.title.errors %}
+                  <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+                <br>
+                <br>
+                {{ form.authors }}
+                {% for error in form.authors.errors %}
+                  <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+              </div>
               <br>
-              {{ form.authors }}
-              {% for error in form.authors.errors %}
-                <span class="text-danger">{{ error }}</span>
-              {% endfor %}
-            </div>
-            <br>
-            {{ form.submit() }}
-          </form>
+              {{ form.submit() }}
+            </form>
       </div>
       <br>
       <br>
-      
+    {% endif %}
       <script>
         // Функция для раскрытия/скрытия формы
         function toggleForm() {
@@ -56,6 +57,11 @@
       </script>
     <br>
     <br>
-    <a href="{{ url_for('routes.delete_book', book_id=book.id) }}">Удалить книгу</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('routes.delete_book', book_id=book.id) }}">Удалить книгу</a>
+    {% endif %}
+    <br>
+    <br>
+    <a href="{{ url_for('routes.get_home') }}">На главную</a>
 </body>
 </html>

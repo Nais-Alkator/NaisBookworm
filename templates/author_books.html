@@ -17,27 +17,28 @@
         {% endfor %}
     </ul>
     <hr>
-    <button id="update_author_button" onclick="toggleForm()">Редактировать автора</button>
-    <div id="form-container" style="display: none;">
-        <form method="POST" action="{{ url_for('routes.update_author', author_id=author.id) }}">
-            {{ form.csrf_token }}
-            <input type="hidden" name="_method" value="PUT">
-            <br>
-            <div class="form-group">
-              {{ form.name.label }}
-              {{ form.name }}
-              {% for error in form.name.errors %}
-                <span class="text-danger">{{ error }}</span>
-              {% endfor %}
-            </div>
-            <br>
-          
-            {{ form.submit() }}
-          </form>
-      </div>
-      <br>
-      <br>
-      
+    {% if current_user.is_authenticated %}
+      <button id="update_author_button" onclick="toggleForm()">Редактировать автора</button>
+      <div id="form-container" style="display: none;">
+          <form method="POST" action="{{ url_for('routes.update_author', author_id=author.id) }}">
+              {{ form.csrf_token }}
+              <input type="hidden" name="_method" value="PUT">
+              <br>
+              <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name }}
+                {% for error in form.name.errors %}
+                  <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+              </div>
+              <br>
+            
+              {{ form.submit() }}
+            </form>
+        </div>
+        <br>
+        <br>
+        {% endif %}
       <script>
         // Функция для раскрытия/скрытия формы
         function toggleForm() {
@@ -52,8 +53,9 @@
           }
         }
       </script>
-
-    <a href="{{ url_for('routes.delete_author', author_id=author.id) }}">Удалить автора</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('routes.delete_author', author_id=author.id) }}">Удалить автора</a>
+    {% endif %}
     <br>
     <br>
     <a href="{{ url_for('routes.get_home') }}">На главную</a>
