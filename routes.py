@@ -1,12 +1,23 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for
+from flask import Blueprint, render_template, request, redirect, flash, url_for, session
 from models import Author, Book, User, db
 from forms import AuthorForm, BookForm, RegistrationForm, LoginForm
-from flask_login import current_user, login_user
-from flask_login import LoginManager
+from flask_login import current_user, login_user, logout_user
+from flask_login import LoginManager, login_required
 
 
 blueprint = Blueprint("routes", __name__)
 login_manager = LoginManager()
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash("Пожалуйста, войдите в систему, чтобы получить доступ.")
+    return redirect(url_for('routes.get_home'))
 
 
 @blueprint.route('/')
@@ -181,7 +192,6 @@ def register():
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
-@login_manager.user_loader
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('routes.get_home'))
@@ -193,8 +203,19 @@ def login():
             flash('Неправильное имя пользователя или пароль')
             return redirect(url_for('routes.login'))
         
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=True)
         user.is_active = True
         db.session.commit()
-        flash("Вы успешно авторизовались")
-        return render_template("index.html", form=form)
+        flash(f"Вы успешно авторизовались как {user.username}")
+        return render_template("index.html", form=form, user=user)
+
+
+@blueprint.route('/logout')
+@login_required
+def logout():
+    current_user.is_active = False
+    db.session.commit()
+    logout_user()
+    flash('Вы успешно вышли из учетной записи.')
+    return redirect(url_for('routes.get_home'))
+
