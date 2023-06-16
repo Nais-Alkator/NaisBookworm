@@ -5,12 +5,12 @@ from models import Author, Book, User
 
 
 @pytest.fixture
-def sample_author(app, db):
+def sample_author():
     author = Author(name="Фёдор Михайлович Достоевский")
     return author
 
 
-def test_author_create(sample_author, app, db):
+def test_author_create(sample_author):
     assert sample_author.name == "Фёдор Михайлович Достоевский"
         
 
@@ -45,7 +45,7 @@ def sample_user():
     return user
 
 
-def test_user_create(sample_user, db, app):
+def test_user_create(sample_user):
     assert sample_user.username == "asdfgh12345"
     assert sample_user.password_hash == "1234567891"
     assert sample_user.is_active == False
