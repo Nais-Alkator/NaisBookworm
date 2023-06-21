@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for, session
+from flask import Blueprint, render_template, request, redirect, flash, url_for
 from models import Author, Book, User, db
 from forms import AuthorForm, BookForm, RegistrationForm, LoginForm
-from flask_login import current_user, login_user, logout_user
-from flask_login import LoginManager, login_required
+from flask_login import current_user, login_user, logout_user, LoginManager, login_required
 
 
 blueprint = Blueprint("routes", __name__)
@@ -40,7 +39,7 @@ def get_books():
     return render_template("books.html", books=books, form=form)
 
 
-@blueprint.route("/add_author", methods=["POST"])
+@blueprint.route("/add_author", methods=["POST", "GET"])
 @login_required
 def add_author():
     form = AuthorForm(request.form)

@@ -23,12 +23,12 @@
         </div>
     {% endfor %}
     <hr>
-    {% if current_user.is_authenticated %}
+    
       <button id="add_author_button" onclick="toggleForm()">Добавить автора</button>
       
       <div id="form-container" style="display: none;">
         <form method="POST" action="{{ url_for('routes.add_author') }}">
-          {{ form.csrf_token }}
+          {{ form.hidden_tag() }}
             <br>
             <div class="form-group">
               {{ form.name.label }}
@@ -42,7 +42,7 @@
             {{ form.submit() }}
           </form>
       </div>
-    {% endif %}
+    
     <br>
     <br>
     <a href="{{ url_for('routes.get_home') }}">На главную</a>

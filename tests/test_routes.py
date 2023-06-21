@@ -1,3 +1,6 @@
+from models import Author
+from flask_login import login_user
+
 def test_get_registration_form(client):
     response = client.get('/registration')
     assert response.status_code == 200
@@ -25,3 +28,17 @@ def test_get_books(client):
     assert response.status_code == 200
     assert '<!DOCTYPE html>' in decoded_html
     assert '<h1>Список книг</h1>' in decoded_html
+
+
+def test_add_author(client, app, authenticated_user):
+    with app.test_request_context():
+        form_data = {
+            'name': 'John Smith',
+        }
+        login_user(authenticated_user)
+        response = client.post('/add_author', data=form_data, follow_redirects=True)
+        assert response.status_code == 200
+        assert b'<!DOCTYPE html>' in response.data
+        author = Author.query.filter_by(name='John Smith').first()
+        assert author is not None
+
