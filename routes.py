@@ -84,7 +84,6 @@ def update_author(author_id):
             flash('Автор успешно изменен.')
             return redirect(url_for('routes.get_authors'))
         else:
-            print(form.errors)
             flash('Ошибка валидации формы.')
             return redirect(url_for('routes.get_authors'))
 

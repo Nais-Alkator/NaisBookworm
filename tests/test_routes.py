@@ -57,9 +57,22 @@ def test_delete_author(client, authenticated_user):
     login_user(authenticated_user)
     response = client.delete(f'/delete_author/{author.id}/', follow_redirects=True)
     decoded_html = response.data.decode("utf-8")
-    print(decoded_html)
     deleted_author = Author.query.first()
     assert response.status_code == 200
     assert '<!DOCTYPE html>' in decoded_html
     assert f"Автор {author.name} успешно удален" in decoded_html
     assert deleted_author is None
+
+
+def test_update_author(client, authenticated_user, database):
+    author = Author(name="Conan Doyle")
+    database.session.add(author)
+    database.session.commit()
+    login_user(authenticated_user)
+    form_data = {"name": "Arthur Conan Doyle"}
+    response = client.put(f"/update_author/{author.id}", data=form_data, follow_redirects=True)
+    updated_author = Author.query.filter_by(name="Arthur Conan Doyle").first()
+    decoded_html = response.data.decode("utf-8")
+    assert response.status_code == 200
+    assert updated_author.name == "Arthur Conan Doyle"
+    assert f"Автор успешно изменен." in decoded_html
