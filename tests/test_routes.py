@@ -54,7 +54,7 @@ def test_list_author_books(client):
 
 def test_delete_author(client, authenticated_user):
     author = Author.query.first()
-    #login_user(authenticated_user)
+    login_user(authenticated_user)
     response = client.delete(f'/delete_author/{author.id}/', follow_redirects=True)
     decoded_html = response.data.decode("utf-8")
     print(decoded_html)
