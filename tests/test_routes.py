@@ -50,3 +50,16 @@ def test_list_author_books(client):
     assert response.status_code == 200
     assert '<!DOCTYPE html>' in decoded_html
     assert f'<title>NaisBookworm - {author.name}</title>' in decoded_html
+
+
+def test_delete_author(client, authenticated_user):
+    author = Author.query.first()
+    #login_user(authenticated_user)
+    response = client.delete(f'/delete_author/{author.id}/', follow_redirects=True)
+    decoded_html = response.data.decode("utf-8")
+    print(decoded_html)
+    deleted_author = Author.query.first()
+    assert response.status_code == 200
+    assert '<!DOCTYPE html>' in decoded_html
+    assert f"Автор {author.name} успешно удален" in decoded_html
+    assert deleted_author is None
