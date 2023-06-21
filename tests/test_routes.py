@@ -42,3 +42,11 @@ def test_add_author(client, app, authenticated_user):
         author = Author.query.filter_by(name='John Smith').first()
         assert author is not None
 
+
+def test_list_author_books(client):
+    author = Author.query.first()
+    response = client.get(f'/author_books/{author.id}')
+    decoded_html = response.data.decode("utf-8")
+    assert response.status_code == 200
+    assert '<!DOCTYPE html>' in decoded_html
+    assert f'<title>NaisBookworm - {author.name}</title>' in decoded_html

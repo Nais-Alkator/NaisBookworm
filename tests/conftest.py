@@ -4,7 +4,7 @@ from routes import blueprint, login_manager, login_user, logout_user
 from models import db, User
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def app(database):
     app = Flask(__name__, template_folder="../templates")
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + "../instance/test_db.db"
@@ -23,13 +23,12 @@ def app(database):
         database.drop_all()
         
 
-
 @pytest.fixture(scope='function')
 def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def database():
     return db
 
