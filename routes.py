@@ -92,13 +92,13 @@ def update_author(author_id):
 @login_required
 def add_book():
     form = BookForm(request.form)
+
     if form.validate():
         author_names = form.authors.data
         authors = []
 
         for author_name in author_names:
             author = Author.query.filter_by(name=author_name).first()
-
             if author:
                 authors.append(author)
             else:

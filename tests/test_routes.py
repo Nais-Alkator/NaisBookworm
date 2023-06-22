@@ -1,5 +1,6 @@
-from models import Author
+from models import Author, Book
 from flask_login import login_user
+
 
 def test_get_registration_form(client):
     response = client.get('/registration')
@@ -76,3 +77,23 @@ def test_update_author(client, authenticated_user, database):
     assert response.status_code == 200
     assert updated_author.name == "Arthur Conan Doyle"
     assert f"Автор успешно изменен." in decoded_html
+
+
+def test_add_book(client, app, authenticated_user):
+    with app.test_request_context():
+        form_data = {
+            "title": "Шерлок Холмс",
+            "authors-0": "Артур Конан Дойл",
+        }
+        # Flask не предусматривает передачу значений в виде списка для аргумента data post запроса
+        login_user(authenticated_user)
+        response = client.post('/add_book', data=form_data, follow_redirects=True)
+        decoded_html = response.data.decode("utf-8")
+        assert response.status_code == 200
+        assert b'<!DOCTYPE html>' in response.data
+        assert 'Книга успешно добавлена.' in decoded_html
+        book = Book.query.filter_by(title="Шерлок Холмс").first()
+        assert book.title == "Шерлок Холмс"
+        assert book.authors[0].name == "Артур Конан Дойл"
+
+        
