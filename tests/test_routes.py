@@ -105,6 +105,14 @@ def test_get_book(client):
     assert f"<h1>{book.title}</h1>" in decoded_html
 
 
+def test_search_book(client):
+    query = "query=Шерлок+Холмс"
+    response = client.get(f"/search_book?{query}", follow_redirects=True)
+    decoded_html = response.data.decode('utf-8')
+    assert response.status_code == 200
+    assert "<h1>Шерлок Холмс</h1>" in decoded_html
+
+
 def test_update_book(client, app, authenticated_user):
     with app.test_request_context():
         book = Book.query.filter_by(title="Шерлок Холмс").first()
