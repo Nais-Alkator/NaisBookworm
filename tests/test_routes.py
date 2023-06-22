@@ -84,8 +84,9 @@ def test_add_book(client, app, authenticated_user):
         form_data = {
             "title": "Шерлок Холмс",
             "authors-0": "Артур Конан Дойл",
+             # Flask не предусматривает передачу значений в виде списка для аргумента data post запроса
         }
-        # Flask не предусматривает передачу значений в виде списка для аргумента data post запроса
+       
         login_user(authenticated_user)
         response = client.post('/add_book', data=form_data, follow_redirects=True)
         decoded_html = response.data.decode("utf-8")
