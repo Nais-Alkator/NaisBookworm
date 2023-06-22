@@ -96,4 +96,12 @@ def test_add_book(client, app, authenticated_user):
         assert book.title == "Шерлок Холмс"
         assert book.authors[0].name == "Артур Конан Дойл"
 
+
+def test_get_book(client):
+    book = Book.query.first()
+    response = client.get(f'/book/{book.id}')
+    decoded_html = response.data.decode('utf-8')
+    assert response.status_code == 200
+    assert f"<h1>{book.title}</h1>" in decoded_html
+
         
