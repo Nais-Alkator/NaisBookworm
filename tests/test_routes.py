@@ -111,7 +111,6 @@ def test_search_book(client, app, authenticated_user):
         query = "query=Шерлок+Холмс"
         response = client.get(f"/search_book?{query}", follow_redirects=True)
         decoded_html = response.data.decode('utf-8')
-        print(decoded_html)
         assert response.status_code == 200
         assert "<h1>Шерлок Холмс</h1>" in decoded_html
 
@@ -119,7 +118,6 @@ def test_search_book(client, app, authenticated_user):
 def test_update_book(client, app, authenticated_user):
     with app.test_request_context():
         book = Book.query.filter_by(title="Шерлок Холмс").first()
-        print(book.title)
         form_data = {
             "title": "Шерлок Холмс приключения",
             "authors-0": "Конан Дойл",
@@ -172,3 +170,13 @@ def test_login(client, app):
         decoded_html = response.data.decode('utf-8')
         assert response.status_code == 200
         assert f"Вы успешно авторизовались как nais" in decoded_html
+
+
+def test_logout(client, app):
+    with app.test_request_context():
+        login_form = {"username": "nais", "password": "12345678", "remember_me": True}
+        login = client.post('/login', data=login_form, follow_redirects=True)
+        logout= client.get('/logout', follow_redirects=True)
+        decoded_html = logout.data.decode('utf-8')
+        assert logout.status_code == 200
+        assert 'Вы успешно вышли из учетной записи.' in decoded_html
