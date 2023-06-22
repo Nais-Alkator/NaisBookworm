@@ -104,4 +104,14 @@ def test_get_book(client):
     assert response.status_code == 200
     assert f"<h1>{book.title}</h1>" in decoded_html
 
-        
+
+def test_delete_book(client, authenticated_user):
+    book = Book.query.first()
+    login_user(authenticated_user)
+    response = client.delete(f'/delete_book/{book.id}/', follow_redirects=True)
+    decoded_html = response.data.decode("utf-8")
+    deleted_book = Book.query.filter_by(title=book.title).first()
+    assert response.status_code == 200
+    assert '<!DOCTYPE html>' in decoded_html
+    assert f"Книга {book.title} успешно удалена" in decoded_html
+    assert deleted_book is None
