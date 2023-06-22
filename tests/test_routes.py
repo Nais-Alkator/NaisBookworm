@@ -1,4 +1,4 @@
-from models import Author, Book
+from models import Author, Book, User
 from flask_login import login_user
 
 
@@ -105,12 +105,15 @@ def test_get_book(client):
     assert f"<h1>{book.title}</h1>" in decoded_html
 
 
-def test_search_book(client):
-    query = "query=Шерлок+Холмс"
-    response = client.get(f"/search_book?{query}", follow_redirects=True)
-    decoded_html = response.data.decode('utf-8')
-    assert response.status_code == 200
-    assert "<h1>Шерлок Холмс</h1>" in decoded_html
+def test_search_book(client, app, authenticated_user):
+    with app.test_request_context():
+        
+        query = "query=Шерлок+Холмс"
+        response = client.get(f"/search_book?{query}", follow_redirects=True)
+        decoded_html = response.data.decode('utf-8')
+        print(decoded_html)
+        assert response.status_code == 200
+        assert "<h1>Шерлок Холмс</h1>" in decoded_html
 
 
 def test_update_book(client, app, authenticated_user):
@@ -144,3 +147,28 @@ def test_delete_book(client, authenticated_user):
     assert deleted_book is None
 
 
+def test_get_registration_form(client):
+    response = client.get('/registration')
+    decoded_html = response.data.decode('utf-8')
+    assert response.status_code == 200
+    assert "<title>NaisBookworm - Регистрация пользователя</title>" in decoded_html
+
+
+def test_register(client, app):
+    with app.test_request_context():
+        form = {"username": "nais", "password": "12345678", "confirm_password": "12345678"}
+        response = client.post('/registration', data=form, follow_redirects=True)
+        decoded_html = response.data.decode('utf-8')
+        user = User.query.filter_by(username="nais").first()
+        assert response.status_code == 200
+        assert 'Вы успешно зарегистрировались! Теперь вы можете войти в систему.' in decoded_html
+        assert user.username == "nais"
+
+
+def test_login(client, app):
+    with app.test_request_context():
+        form = {"username": "nais", "password": "12345678", "remember_me": True}
+        response = client.post('/login', data=form, follow_redirects=True)
+        decoded_html = response.data.decode('utf-8')
+        assert response.status_code == 200
+        assert f"Вы успешно авторизовались как nais" in decoded_html

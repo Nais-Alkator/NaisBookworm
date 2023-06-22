@@ -33,7 +33,7 @@ def database():
     return db
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def authenticated_user(app):
     user = User(username='john', password_hash='password', is_active=True)
     with app.test_request_context():
