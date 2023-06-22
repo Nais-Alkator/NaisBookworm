@@ -136,7 +136,7 @@ def delete_book(book_id):
     return redirect(url_for("routes.get_books"))
 
 
-@blueprint.route("/update_book/<int:book_id>", methods=["GET", "POST"])
+@blueprint.route("/update_book/<int:book_id>", methods=["GET", "POST", "PUT"])
 @login_required
 def update_book(book_id):
     if request.method == 'PUT' or request.form.get('_method') == 'PUT':

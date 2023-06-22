@@ -105,6 +105,25 @@ def test_get_book(client):
     assert f"<h1>{book.title}</h1>" in decoded_html
 
 
+def test_update_book(client, app, authenticated_user):
+    with app.test_request_context():
+        book = Book.query.filter_by(title="Шерлок Холмс").first()
+        print(book.title)
+        form_data = {
+            "title": "Шерлок Холмс приключения",
+            "authors-0": "Конан Дойл",
+        }
+        login_user(authenticated_user)
+        response = client.put(f'/update_book/{book.id}', data=form_data, follow_redirects=True)
+        decoded_html = response.data.decode("utf-8")
+        assert response.status_code == 200
+        assert b'<!DOCTYPE html>' in response.data
+        assert 'Книга успешно изменена.' in decoded_html
+        book = Book.query.filter_by(title="Шерлок Холмс приключения").first()
+        assert book.title == "Шерлок Холмс приключения"
+        assert book.authors[0].name == "Конан Дойл"
+
+
 def test_delete_book(client, authenticated_user):
     book = Book.query.first()
     login_user(authenticated_user)
@@ -115,3 +134,5 @@ def test_delete_book(client, authenticated_user):
     assert '<!DOCTYPE html>' in decoded_html
     assert f"Книга {book.title} успешно удалена" in decoded_html
     assert deleted_book is None
+
+
