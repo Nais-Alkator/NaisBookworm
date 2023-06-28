@@ -10,6 +10,8 @@ COPY . /
 # Установка зависимостей
 RUN pip install -r requirements.txt
 
+EXPOSE 5000 8000
+
 # Определение команды запуска приложения
 CMD ["python", "app.py"]
 
