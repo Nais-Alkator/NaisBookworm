@@ -12,3 +12,4 @@ RUN pip install -r requirements.txt
 
 # Определение команды запуска приложения
 CMD ["python", "app.py"]
+
